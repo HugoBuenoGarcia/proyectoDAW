@@ -1,0 +1,236 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #0a0a0a;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+.admin-container h1 {
+  color: #ff4500;
+  margin-bottom: 30px;
+  text-align: center;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+}
+
+.admin-msg {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.admin-msg.success {
+  background-color: #1a3a1a;
+  color: #4ade80;
+  border: 1px solid #22c55e;
+}
+
+.admin-msg.error {
+  background-color: #3a1a1a;
+  color: #ff6b6b;
+  border: 1px solid #ff4444;
+}
+
+.usuarios-tabla {
+  overflow-x: auto;
+}
+
+.usuarios-tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.usuarios-tabla thead {
+  background-color: #ff4500;
+  color: white;
+}
+
+.usuarios-tabla th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.usuarios-tabla td {
+  padding: 15px;
+  border-bottom: 1px solid #333;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.usuarios-tabla tbody tr:hover {
+  background-color: #1a1a1a;
+}
+
+.usuarios-tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editar,
+.btn-eliminar {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-editar {
+  background-color: #32cd32;
+  color: #000;
+}
+
+.btn-editar:hover {
+  background-color: #1aa01a;
+  color: white;
+  box-shadow: 0 0 10px rgba(50, 205, 50, 0.4);
+}
+
+.btn-eliminar {
+  background-color: #ff4444;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #cc0000;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background-color: #111;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
+}
+
+.modal-contenido h2 {
+  margin-bottom: 20px;
+  color: #ff4500;
+  font-size: 1.8rem;
+}
+
+.form-grupo {
+  margin-bottom: 20px;
+}
+
+.form-grupo label {
+  display: block;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.form-grupo input,
+.form-grupo select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus {
+  outline: none;
+  border-color: #ff4500;
+  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.25);
+}
+
+.modal-acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar {
+  background-color: #32cd32;
+  color: #000;
+}
+
+.btn-guardar:hover {
+  background-color: #1aa01a;
+  color: white;
+  box-shadow: 0 0 10px rgba(50, 205, 50, 0.4);
+}
+
+.btn-cancelar {
+  background-color: #555;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #777;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 15px;
+  }
+
+  .usuarios-tabla th,
+  .usuarios-tabla td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .acciones {
+    flex-direction: column;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    width: 100%;
+  }
+
+  .modal-contenido {
+    width: 95%;
+  }
+}

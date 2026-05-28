@@ -1,0 +1,896 @@
+:root {
+  --color-resistencia: #ff4500;
+  --color-mutante: #32cd32;
+  --bg-oscuro: #0a0a0a;
+  --bg-tarjeta: #111111;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-oscuro);
+  color: #eeeeee;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- BOTÓN VOLVER --- */
+.btn-back {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.btn-back:hover {
+  background: white;
+  color: black;
+}
+
+/* --- NAVBAR REESTRUCTURADO --- */
+.navbar {
+  background-color: #000;
+  border-bottom: 2px solid var(--color-resistencia);
+  height: 90px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.navbar-logo {
+  flex: 0 0 200px;
+}
+
+.navbar-logo img {
+  height: 65px;
+  width: auto;
+  border-radius: 50%;
+  border: 2px solid var(--color-resistencia);
+}
+
+.navbar-menu-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+}
+
+.navbar-spacer {
+  flex: 0 0 200px;
+}
+
+.navbar-menu-center a,
+.dropbtn {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.navbar-menu-center a:hover,
+.navbar-menu-center a.active {
+  color: var(--color-resistencia);
+}
+
+/* --- DROPDOWN --- */
+.dropdown {
+  position: relative;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #111;
+  min-width: 160px;
+  border: 1px solid #333;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.dropdown-content a {
+  padding: 12px;
+  display: block;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* --- TARJETAS DE PERSONAJES Y SETS --- */
+.personajes-grid,
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 40px 0;
+}
+
+.personaje-card,
+.set-card {
+  background: var(--bg-tarjeta);
+  border: 1px solid #222;
+  border-radius: 15px;
+  padding: 20px;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.personaje-card:hover,
+.set-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--color-resistencia);
+}
+
+.personaje-card img,
+.set-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.card-link:hover .card-title {
+  color: var(--color-resistencia);
+}
+
+.card-mutante:hover .card-title {
+  color: var(--color-mutante);
+}
+
+.titulo-seccion-faccion {
+  text-align: center;
+  font-size: 3rem;
+  margin: 40px 0;
+  color: var(--color-resistencia);
+  text-shadow: 2px 2px 10px rgba(255, 69, 0, 0.3);
+}
+
+.titulo-seccion-faccion.mutante {
+  color: var(--color-mutante);
+  text-shadow: 2px 2px 10px rgba(50, 205, 50, 0.3);
+}
+
+.personaje-card img,
+.set-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.card-link {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.card-title {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+  transition: color 0.3s;
+}
+
+.card-link:hover .card-title {
+  color: var(--color-resistencia);
+}
+
+/* --- DISEÑO DETALLE DE PERSONAJE --- */
+.ficha-personaje {
+  background: var(--bg-tarjeta);
+  border-radius: 12px;
+  padding: 40px;
+  margin-top: 20px;
+  border: 1px solid #333;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(255, 69, 0, 0.1);
+}
+
+.ficha-superior {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 40px;
+  border-bottom: 2px dashed #444;
+  padding-bottom: 30px;
+}
+
+.ficha-imagen {
+  flex: 0 0 auto;
+}
+
+.ficha-imagen img {
+  max-width: 100%;
+  height: 350px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 2px solid #333;
+  box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
+}
+
+.ficha-imagen::after {
+  content: "ID://BIO-ARCHIVE";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: var(--color-resistencia);
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.ficha-basica {
+  flex: 1;
+  text-align: left;
+}
+
+.nombre-detalle {
+  font-size: 3.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  color: var(--color-resistencia);
+  text-shadow:
+    2px 2px 10px rgba(255, 69, 0, 0.5),
+    3px 3px 0px #000;
+  letter-spacing: 2px;
+}
+
+.descripcion-breve {
+  margin-top: 10px;
+}
+
+.ficha-inferior {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.info-adicional {
+  background: #000;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  border-left: 5px solid var(--color-resistencia);
+  position: relative;
+}
+
+.info-adicional h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0 0 15px 0;
+  letter-spacing: 2px;
+}
+
+.info-adicional p {
+  font-size: 1.1rem;
+  color: #bbb;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.tema-mutant .nombre-detalle {
+  color: var(--color-mutante);
+  text-shadow:
+    2px 2px 10px rgba(50, 205, 50, 0.5),
+    3px 3px 0px #000;
+}
+
+.card-mutante .ficha-imagen img {
+  border-color: #444;
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.4);
+}
+
+/* --- FACCIONES --- */
+.intro-saga {
+  text-align: center;
+  margin: 40px auto 60px auto;
+  padding: 50px 30px;
+  max-width: 950px;
+  background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+  border-radius: 20px;
+  border: 1px solid #333;
+  border-left: 8px solid var(--color-resistencia);
+  border-right: 8px solid var(--color-mutante);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+.intro-saga h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 3px;
+  text-shadow:
+    0 0 15px rgba(255, 69, 0, 0.5),
+    3px 3px 0px #000;
+}
+
+.intro-saga p {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+/* --- SELECTOR DE FACCIONES --- */
+.facciones-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.faccion-info-card {
+  background: var(--bg-tarjeta);
+  padding: 40px;
+  border-radius: 15px;
+  border: 2px solid #222;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.faccion-info-card h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: var(--color-resistencia);
+}
+
+.card-mutante h2 {
+  color: var(--color-mutante);
+}
+
+.faccion-info-card:hover {
+  transform: scale(1.03);
+  border-color: var(--color-resistencia);
+  box-shadow: 0 0 20px rgba(255, 69, 0, 0.2);
+}
+
+.card-mutante:hover {
+  border-color: var(--color-mutante);
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.2);
+}
+
+.btn-hero {
+  display: inline-block;
+  background-color: var(--color-resistencia);
+  color: white;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+.btn-mutante {
+  background-color: var(--color-mutante);
+}
+
+/* --- FOOTER --- */
+.footer-container {
+  background-color: #000;
+  padding: 40px;
+  text-align: center;
+  border-top: 2px solid var(--color-resistencia);
+}
+
+.star-rating {
+  font-size: 2.5rem;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.star.on {
+  color: #ffc107;
+}
+.star.off {
+  color: #444;
+}
+
+.feedback-form textarea {
+  width: 100%;
+  max-width: 500px;
+  background: #111;
+  color: white;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.btn-back {
+  background: #222;
+  color: #fff;
+  padding: 10px 20px;
+  border: 1px solid #444;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-back:hover {
+  background: var(--color-resistencia);
+}
+
+/* --- PORTADA --- */
+.hero-section {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("/imagenes/portada.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  margin: 20px auto;
+  max-width: 1100px;
+  border-radius: 20px;
+  border: 2px solid #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-content h1 {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #eeeeee;
+  margin: 0 auto 30px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-resistencia);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-resistencia);
+}
+
+/* --- SECCIÓN DE EPISODIOS --- */
+.page-header {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.page-header p {
+  font-size: 1.2rem;
+  color: #bbb;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.episodios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 50px;
+  padding: 40px 0;
+}
+
+.episodio-card {
+  background: var(--bg-tarjeta);
+  border: 1px solid #222;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.episodio-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--color-mutante);
+  box-shadow: 0 15px 30px rgba(50, 205, 50, 0.2);
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #000;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.episodio-info {
+  padding: 30px;
+  text-align: center;
+}
+
+.episodio-info h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-mutante);
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.episodio-info p {
+  color: #bbb;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- ESTILOS DE RESEÑAS --- */
+.seccion-resenas {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #333;
+}
+
+.resena-card {
+  background: #151515;
+  border-left: 4px solid var(--color-resistencia);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.resena-card strong {
+  display: block;
+  color: var(--color-resistencia);
+  margin-bottom: 5px;
+}
+
+.form-resena textarea {
+  width: 100%;
+  min-height: 100px;
+  background: #000;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* --- ESTILOS DE SISTEMA DE ESTRELLAS --- */
+.selector-estrellas {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.selector-estrellas label {
+  color: #888;
+  font-size: 0.9rem;
+  margin-right: 10px;
+}
+
+.estrella-btn {
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    color 0.2s;
+  padding: 0;
+}
+
+.estrella-btn:hover {
+  transform: scale(1.2);
+}
+
+.estrella-btn.activa {
+  color: var(--color-resistencia);
+  text-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+}
+
+.estrellas-display {
+  color: var(--color-resistencia);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.resena-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.resena-footer-admin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.btn-delete-resena {
+  background: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-resena:hover {
+  background: #ff4444;
+  color: #000;
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+}
+
+/* --- INTEGRACIÓN DE AUTENTICACIÓN EN NAVBAR --- */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.user-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-icon-btn {
+  background: transparent;
+  border: 2px solid var(--color-resistencia);
+  color: var(--color-resistencia);
+  font-size: 1.5rem;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-icon-btn:hover {
+  background: var(--color-resistencia);
+  color: white;
+  box-shadow: 0 0 15px var(--color-resistencia);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #111;
+  border: 2px solid var(--color-resistencia);
+  border-radius: 8px;
+  min-width: 220px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.user-dropdown-name {
+  padding: 12px 15px;
+  color: var(--color-resistencia);
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.user-dropdown-menu hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 8px 0;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  color: #fff;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.dropdown-item:hover {
+  background-color: #222;
+  color: var(--color-resistencia);
+  padding-left: 20px;
+}
+
+.dropdown-item.logout {
+  color: #ff4444;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #222;
+  color: #ff4444;
+}
+
+.btn-login-nav {
+  background-color: var(--color-resistencia);
+  color: white;
+  padding: 8px 18px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.btn-login-nav:hover {
+  background-color: white;
+  color: black;
+  box-shadow: 0 0 10px var(--color-resistencia);
+}
+
+.btn-delete-account-form {
+  background: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-delete-account-form:hover {
+  background: #ff4444;
+  color: black;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
+}
+
+/* --- EDITAR USUARIO --- */
+.editar-usuario-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  background: var(--bg-tarjeta);
+  border: 1px solid #333;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 69, 0, 0.15);
+}
+
+.editar-usuario-container h1 {
+  text-align: center;
+  color: var(--color-resistencia);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.editar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.editar-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.editar-form input,
+.editar-form select {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.editar-form input:focus,
+.editar-form select:focus {
+  outline: none;
+  border-color: var(--color-resistencia);
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+}
+
+.editar-msg {
+  text-align: center;
+  margin-top: 10px;
+  color: var(--color-mutante);
+  font-weight: bold;
+}
+
+.btn-guardar {
+  background: var(--color-resistencia);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.btn-guardar:hover {
+  background: white;
+  color: black;
+  box-shadow: 0 0 15px var(--color-resistencia);
+}
