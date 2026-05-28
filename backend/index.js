@@ -262,6 +262,4 @@ app.get("/api/sets", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`Servidor de la Resistencia activo en http://localhost:${PORT}`),
-);
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
