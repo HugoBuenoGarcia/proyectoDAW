@@ -6,20 +6,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "mutantbusters_db",
+// Configuración de la conexión utilizando la URI de Supabase
+const { Pool } = pg;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-db.connect((err) => {
+pool.connect((err) => {
   if (err) {
-    console.error("Error conectando a la base de datos:", err);
+    console.error("Error conectando a la base de datos de Supabase:", err);
     return;
   }
-  console.log("Conectado con éxito a la base de datos Mutant Busters");
+  console.log(
+    "Conectado con éxito a la base de datos Mutant Busters en Supabase",
+  );
 });
 
 app.get("/api/personajes", (req, res) => {
@@ -28,47 +31,50 @@ app.get("/api/personajes", (req, res) => {
   let params = [];
 
   if (bando) {
-    sql += " WHERE id_faccion = ?";
+    sql += " WHERE id_faccion = $1";
     params.push(bando);
   }
 
-  db.query(sql, params, (err, results) => {
+  pool.query(sql, params, (err, results) => {
     if (err) return res.status(500).json(err);
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
 app.get("/api/personajes/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM personajes WHERE id = ?";
+  const sql = "SELECT * FROM personajes WHERE id = $1";
 
-  db.query(sql, [id], (err, result) => {
+  pool.query(sql, [id], (err, result) => {
     if (err) return res.status(500).json(err);
-    res.json(result[0]);
+    res.json(result.rows[0]);
   });
 });
 
 app.post("/api/registro", (req, res) => {
   const { username, email, password } = req.body;
   const sql =
-    "INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)";
+    "INSERT INTO usuarios (username, email, password) VALUES ($1, $2, $3) RETURNING id";
 
-  db.query(sql, [username, email, password], (err, result) => {
+  pool.query(sql, [username, email, password], (err, result) => {
     if (err)
       return res.status(500).json({ error: "Error al registrar usuario" });
-    res.json({ message: "Usuario registrado con éxito", id: result.insertId });
+    res.json({
+      message: "Usuario registrado con éxito",
+      id: result.rows[0].id,
+    });
   });
 });
 
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
   const sql =
-    "SELECT id, username, rol FROM usuarios WHERE email = ? AND password = ?";
+    "SELECT id, username, rol FROM usuarios WHERE email = $1 AND password = $2";
 
-  db.query(sql, [email, password], (err, result) => {
+  pool.query(sql, [email, password], (err, result) => {
     if (err) return res.status(500).json(err);
-    if (result.length > 0) {
-      res.json({ success: true, usuario: result[0] });
+    if (result.rows.length > 0) {
+      res.json({ success: true, usuario: result.rows[0] });
     } else {
       res
         .status(401)
@@ -83,12 +89,12 @@ app.get("/api/resenas/:tipo/:id", (req, res) => {
     SELECT v.*, u.username 
     FROM valoraciones v 
     JOIN usuarios u ON v.id_usuario = u.id 
-    WHERE v.tipo_referencia = ? AND v.id_referencia = ?
+    WHERE v.tipo_referencia = $1 AND v.id_referencia = $2
     ORDER BY v.fecha DESC`;
 
-  db.query(sql, [tipo, id], (err, results) => {
+  pool.query(sql, [tipo, id], (err, results) => {
     if (err) return res.status(500).json(err);
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
@@ -96,14 +102,14 @@ app.post("/api/resenas", (req, res) => {
   const { id_usuario, puntuacion, comentario, id_referencia, tipo_referencia } =
     req.body;
   const sql =
-    "INSERT INTO valoraciones (id_usuario, puntuacion, comentario, id_referencia, tipo_referencia) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO valoraciones (id_usuario, puntuacion, comentario, id_referencia, tipo_referencia) VALUES ($1, $2, $3, $4, $5) RETURNING id";
 
-  db.query(
+  pool.query(
     sql,
     [id_usuario, puntuacion, comentario, id_referencia, tipo_referencia],
     (err, result) => {
       if (err) return res.status(500).json(err);
-      res.json({ message: "Reseña guardada", id: result.insertId });
+      res.json({ message: "Reseña guardada", id: result.rows[0].id });
     },
   );
 });
@@ -111,17 +117,17 @@ app.post("/api/resenas", (req, res) => {
 app.delete("/api/resenas/:id", (req, res) => {
   const { id } = req.params;
   const { solicitanteRol, solicitanteId } = req.query;
-  const sqlGet = "SELECT id_usuario FROM valoraciones WHERE id = ?";
+  const sqlGet = "SELECT id_usuario FROM valoraciones WHERE id = $1";
 
-  db.query(sqlGet, [id], (err, results) => {
+  pool.query(sqlGet, [id], (err, results) => {
     if (err) return res.status(500).json(err);
-    if (results.length === 0) {
+    if (results.rows.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Reseña no encontrada." });
     }
 
-    const idUsuarioResena = results[0].id_usuario;
+    const idUsuarioResena = results.rows[0].id_usuario;
 
     if (
       solicitanteRol !== "admin" &&
@@ -133,9 +139,9 @@ app.delete("/api/resenas/:id", (req, res) => {
       });
     }
 
-    const sqlDelete = "DELETE FROM valoraciones WHERE id = ?";
+    const sqlDelete = "DELETE FROM valoraciones WHERE id = $1";
 
-    db.query(sqlDelete, [id], (err, result) => {
+    pool.query(sqlDelete, [id], (err, result) => {
       if (err) return res.status(500).json(err);
       res.json({
         success: true,
@@ -157,22 +163,22 @@ app.get("/api/usuarios", (req, res) => {
 
   const sql = "SELECT id, username, email, rol FROM usuarios";
 
-  db.query(sql, (err, results) => {
+  pool.query(sql, (err, results) => {
     if (err) return res.status(500).json(err);
     res.json({
       success: true,
-      usuarios: results,
+      usuarios: results.rows,
     });
   });
 });
 
 app.get("/api/usuarios/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT id, username, email, rol FROM usuarios WHERE id = ?";
+  const sql = "SELECT id, username, email, rol FROM usuarios WHERE id = $1";
 
-  db.query(sql, [id], (err, result) => {
+  pool.query(sql, [id], (err, result) => {
     if (err) return res.status(500).json(err);
-    if (result.length === 0) {
+    if (result.rows.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Usuario no encontrado" });
@@ -180,7 +186,7 @@ app.get("/api/usuarios/:id", (req, res) => {
 
     res.json({
       success: true,
-      usuario: result[0],
+      usuario: result.rows[0],
     });
   });
 });
@@ -199,20 +205,24 @@ app.put("/api/usuarios/:id", (req, res) => {
 
   if (password && password.trim() !== "") {
     const sql =
-      "UPDATE usuarios SET username = ?, email = ?, password = ?, rol = ? WHERE id = ?";
+      "UPDATE usuarios SET username = $1, email = $2, password = $3, rol = $4 WHERE id = $5";
 
-    db.query(sql, [username, email, password, rol || "usuario", id], (err) => {
-      if (err) return res.status(500).json(err);
-      res.json({
-        success: true,
-        message: "Usuario actualizado con éxito.",
-      });
-    });
+    pool.query(
+      sql,
+      [username, email, password, rol || "usuario", id],
+      (err) => {
+        if (err) return res.status(500).json(err);
+        res.json({
+          success: true,
+          message: "Usuario actualizado con éxito.",
+        });
+      },
+    );
   } else {
     const sql =
-      "UPDATE usuarios SET username = ?, email = ?, rol = ? WHERE id = ?";
+      "UPDATE usuarios SET username = $1, email = $2, rol = $3 WHERE id = $4";
 
-    db.query(sql, [username, email, rol || "usuario", id], (err) => {
+    pool.query(sql, [username, email, rol || "usuario", id], (err) => {
       if (err) return res.status(500).json(err);
       res.json({
         success: true,
@@ -224,18 +234,18 @@ app.put("/api/usuarios/:id", (req, res) => {
 
 app.delete("/api/usuarios/:id", (req, res) => {
   const { id } = req.params;
-  const sqlResenas = "DELETE FROM valoraciones WHERE id_usuario = ?";
+  const sqlResenas = "DELETE FROM valoraciones WHERE id_usuario = $1";
 
-  db.query(sqlResenas, [id], (err) => {
+  pool.query(sqlResenas, [id], (err) => {
     if (err)
       return res
         .status(500)
         .json({ error: "Error al eliminar las reseñas del usuario" });
 
-    const sqlUsuario = "DELETE FROM usuarios WHERE id = ?";
-    db.query(sqlUsuario, [id], (err, result) => {
+    const sqlUsuario = "DELETE FROM usuarios WHERE id = $1";
+    pool.query(sqlUsuario, [id], (err, result) => {
       if (err) return res.status(500).json(err);
-      if (result.affectedRows === 0) {
+      if (result.rowCount === 0) {
         return res
           .status(404)
           .json({ message: "El sujeto no existe en el archivo." });
@@ -248,18 +258,20 @@ app.delete("/api/usuarios/:id", (req, res) => {
 });
 
 app.get("/api/episodios", (req, res) => {
-  db.query("SELECT * FROM episodios", (err, results) => {
+  pool.query("SELECT * FROM episodios ORDER BY id ASC", (err, results) => {
     if (err) return res.status(500).json(err);
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
 app.get("/api/sets", (req, res) => {
-  db.query("SELECT * FROM sets", (err, results) => {
+  pool.query("SELECT * FROM sets ORDER BY id ASC", (err, results) => {
     if (err) return res.status(500).json(err);
-    res.json(results);
+    res.json(results.rows);
   });
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Servidor de la Resistencia activo en el puerto ${PORT}`),
+);
