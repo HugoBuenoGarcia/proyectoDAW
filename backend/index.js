@@ -1,5 +1,5 @@
 import express from "express";
-import mysql from "mysql2";
+import pg from "pg";
 import cors from "cors";
 
 const app = express();
