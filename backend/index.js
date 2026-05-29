@@ -69,16 +69,26 @@ app.post("/api/registro", (req, res) => {
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
   const sql =
-    "SELECT id, username, rol FROM usuarios WHERE email = $1 AND password = $2";
+    "SELECT id, username, email, rol FROM usuarios WHERE email = $1 AND password = $2";
 
-  pool.query(sql, [email, password], (err, result) => {
+  pool.query(sql, [email, password], (err, results) => {
     if (err) return res.status(500).json(err);
-    if (result.rows.length > 0) {
-      res.json({ success: true, usuario: result.rows[0] });
+    if (results.rows.length > 0) {
+      const fila = results.rows[0];
+      res.json({
+        success: true,
+        usuario: {
+          id: fila.id,
+          username: fila.username,
+          email: fila.email,
+          rol: String(fila.rol).trim().toLowerCase(), // Forzamos minúsculas limpias sin espacios
+        },
+      });
     } else {
-      res
-        .status(401)
-        .json({ success: false, message: "Credenciales incorrectas" });
+      res.json({
+        success: false,
+        message: "Combinación de correo y contraseña incorrecta.",
+      });
     }
   });
 });
@@ -184,9 +194,15 @@ app.get("/api/usuarios/:id", (req, res) => {
         .json({ success: false, message: "Usuario no encontrado" });
     }
 
+    const fila = result.rows[0];
     res.json({
       success: true,
-      usuario: result.rows[0],
+      usuario: {
+        id: fila.id,
+        username: fila.username,
+        email: fila.email,
+        rol: String(fila.rol).trim().toLowerCase(),
+      },
     });
   });
 });
