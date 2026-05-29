@@ -52,16 +52,23 @@ app.get("/api/personajes/:id", (req, res) => {
 });
 
 app.post("/api/registro", (req, res) => {
-  const { username, email, password } = req.body;
-  const sql =
-    "INSERT INTO usuarios (username, email, password) VALUES ($1, $2, $3) RETURNING id";
+  const { username, email, password, rol } = req.body;
+  const checkSql = "SELECT * FROM usuarios WHERE email = $1";
+  pool.query(checkSql, [email], (err, result) => {
+    if (err) return res.status(500).json(err);
+    if (result.rows.length > 0) {
+      return res.status(400).json({ message: "El correo ya está registrado." });
+    }
 
-  pool.query(sql, [username, email, password], (err, result) => {
-    if (err)
-      return res.status(500).json({ error: "Error al registrar usuario" });
-    res.json({
-      message: "Usuario registrado con éxito",
-      id: result.rows[0].id,
+    const rolFinal = rol ? String(rol).trim().toLowerCase() : "usuario";
+    const sql =
+      "INSERT INTO usuarios (username, email, password, rol) VALUES ($1, $2, $3, $4)";
+    pool.query(sql, [username, email, password, rolFinal], (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json({
+        success: true,
+        message: "Usuario registrado con éxito.",
+      });
     });
   });
 });
