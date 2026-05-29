@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configuración de la conexión utilizando la URI de Supabase
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -88,7 +87,7 @@ app.post("/api/login", (req, res) => {
           id: fila.id,
           username: fila.username,
           email: fila.email,
-          rol: String(fila.rol).trim().toLowerCase(), // Forzamos minúsculas limpias sin espacios
+          rol: String(fila.rol).trim().toLowerCase(),
         },
       });
     } else {
