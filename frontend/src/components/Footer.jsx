@@ -43,7 +43,7 @@ const Footer = () => {
     <footer className="footer-container">
       <div className="footer-info">
         <p>
-          &copy; 2026 La Résistance HQ RéBusted- Archivos Clasificados de Mutant
+          &copy; 2026 Hugo Bueno García - Archivos Clasificados de Mutant
           Busters.
         </p>
       </div>
